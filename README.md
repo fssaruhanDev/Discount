@@ -39,14 +39,19 @@ Kullanıcı, JWT Bearer Token'ın süresi dolmuşsa otomatik olarak oturumdan ç
 4 -Kullanıcı, Swagger UI arayüzünde herhangi bir hata durumunda uygun hata mesajını görmelidir.
 
 
+
+
+
 3: Ürünler ve Sepet
- Kullanıcı, ürünleri ekleyebilmeli ve gerekli alanları doğru bir şekilde doldurmalıdır.
+Kullanıcı, ürünleri ekleyebilmeli ve gerekli alanları doğru bir şekilde doldurmalıdır.
 
 Kullanıcı ürünleri listeleyebilmeli
 
 Kullanıcı ürünleri sepetine ekleyebilmeli
 
 Kullanıcı eğer sepetine eklemeye çalıştığı ürünün stoğu yoksa hata almalı 
+
+
 
 
 4: İndirimler API'si
