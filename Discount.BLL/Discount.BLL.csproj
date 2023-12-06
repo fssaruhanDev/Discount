@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="BASE\" />
+    <None Remove="DTO\" />
+    <None Remove="LOGICS\" />
+    <None Remove="DTO\User\" />
+    <None Remove="DTO\Product\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BASE\" />
+    <Folder Include="DTO\" />
+    <Folder Include="LOGICS\" />
+    <Folder Include="DTO\User\" />
+    <Folder Include="DTO\Product\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Discount.Data\Discount.Data.csproj" />
+  </ItemGroup>
+</Project>
