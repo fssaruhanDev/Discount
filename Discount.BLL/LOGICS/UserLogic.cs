@@ -3,17 +3,17 @@ using Discount.BLL.BASE;
 using Discount.BLL.DTO.User;
 using Discount.Data.ORM.Context;
 using Discount.Data.ORM.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Discount.BLL.LOGICS
 {
-    public class UserLogic : IUser
+    public class UserLogic : BaseLogic<T100_User>
     {
 
-        EntityConnection db = new EntityConnection();
-
-        public UserLogic()
+        public UserLogic(EntityConnection entityConnection)
         {
-            
+            db = entityConnection;
+            _context = db.Set<T100_User>();
         }
 
         public List<UserDTO> get()
@@ -21,9 +21,9 @@ namespace Discount.BLL.LOGICS
             throw new NotImplementedException();
         }
 
-        public UserDTO Login(string username, string password)
+        public async Task<UserDTO> Login(string username, string password)
         {
-            T100_Users usr = db.T100_Users.FirstOrDefault(x => x.UserName == username && x.Password == password && x.IsActive == true && x.IsDeleted == false);
+            T100_User usr = await _context.FirstOrDefaultAsync(x => x.UserName == username && x.Password == password && x.IsActive ==true && x.IsDeleted == false);
 
             if (usr != null)
             {

@@ -3,7 +3,7 @@ using Discount.Data.ORM.Base;
 
 namespace Discount.Data.ORM.Entities
 {
-	public class T100_Users : BaseEntity
+	public class T100_User : BaseEntity
 	{
 
 		public string Name { get; set; }

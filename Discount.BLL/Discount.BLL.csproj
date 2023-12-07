@@ -14,7 +14,6 @@
     <None Remove="DTO\Product\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BASE\" />
     <Folder Include="DTO\" />
     <Folder Include="LOGICS\" />
     <Folder Include="DTO\User\" />

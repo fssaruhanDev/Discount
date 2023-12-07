@@ -1,6 +1,7 @@
 ﻿
 using Discount.BLL.BASE;
 using Discount.BLL.DTO.User;
+using Discount.Data.ORM.Context;
 using Discount.Security;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,14 +14,15 @@ namespace Discount.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly IConfiguration _configuration;
+        protected EntityConnection _db;
+        private readonly ServicesProvider servicesProvider;
 
-        private readonly IUser _UserService;
-
-        public UserController(ILogger<UserController> logger, IConfiguration configuration,IUser userService)
+        public UserController( EntityConnection entityConnection,ILogger<UserController> logger, IConfiguration configuration)
         {
+            _db = entityConnection;
             _logger = logger;
             _configuration = configuration;
-            _UserService = userService;
+            servicesProvider = new ServicesProvider(_db);
         }
 
         
@@ -28,11 +30,11 @@ namespace Discount.Controllers
         // GET: api/values
         [HttpGet]
         [Route("login/username={userName}&password={password}")]
-        public IActionResult Login(string userName, string password)
+        public async Task<IActionResult> Login(string userName, string password)
         {
             try
             {
-                UserDTO user = _UserService.Login(userName, password);
+                UserDTO user = await servicesProvider.UserServices.Login(userName, password);
                    
 
                 if (user != null)

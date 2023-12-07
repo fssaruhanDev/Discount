@@ -22,7 +22,7 @@ namespace Discount.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Discount.Data.ORM.Entities.T100_Users", b =>
+            modelBuilder.Entity("Discount.Data.ORM.Entities.T100_User", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
