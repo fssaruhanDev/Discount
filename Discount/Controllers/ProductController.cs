@@ -16,15 +16,13 @@ namespace Discount.Controllers
     {
 
         private readonly ILogger<UserController> _logger;
-        private readonly IConfiguration _configuration;
         protected EntityConnection _db;
         private readonly ServicesProvider servicesProvider;
 
-        public ProductController(EntityConnection entityConnection, ILogger<UserController> logger, IConfiguration configuration)
+        public ProductController(EntityConnection entityConnection, ILogger<UserController> logger)
         {
             _db = entityConnection;
             _logger = logger;
-            _configuration = configuration;
             servicesProvider = new ServicesProvider(_db);
         }
 

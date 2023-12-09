@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Discount.BLL.DTO.Product;
+using Discount.Data.ORM.Entities;
+using System;
 namespace Discount.BLL.DTO.Basket
 {
 	public class Basket
 	{
-		public Basket()
-		{
-		}
-
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public int ID { get; set; }
+        public double Amount { get; set; }
+        public bool Discount { get; set; }
+        public double Price { get; set; }
+        public int Quantity { get; set; }
+        public List<Product.Product> Product { get; set; }
     }
 }
 

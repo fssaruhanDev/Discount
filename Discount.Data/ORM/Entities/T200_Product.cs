@@ -4,12 +4,14 @@ namespace Discount.Data.ORM.Entities
 {
 	public class T200_Product : BaseEntity
 	{
-        public string ProductName { get; set; }
-        public string ProductDescription { get; set; }
+        public required string ProductName { get; set; }
+        public required string ProductDescription { get; set; }
+        public required string ProductCompany { get; set; }
+        public required string ProductSize { get; set; }
         public int ProductStock { get; set; }
         public double ProductPrice { get; set; }
 
-        //List<T211_BasketProduct> BasketProducts { get; set; }
+        List<T211_BasketProduct>? BasketProducts { get; set; }
     }
 }
 

@@ -8,27 +8,26 @@ using System.Threading.Tasks;
 
 namespace Discount.BLL.BASE
 {
-    public class ServicesProvider : IDisposable
+    public class ServicesProvider(EntityConnection _con) : IDisposable
     {
-        EntityConnection con;
-
-        public ServicesProvider(EntityConnection _con)
-        {
-            this.con = _con;
-        }
-
         private UserLogic _userLogic;
 
-        public UserLogic UserServices => _userLogic ?? new UserLogic(con);
+        public UserLogic UserServices => _userLogic ?? new UserLogic(_con);
 
         private ProductLogic _ProductLogic;
 
-        public ProductLogic ProductService => _ProductLogic ?? new ProductLogic(con);
+        public ProductLogic ProductService => _ProductLogic ?? new ProductLogic(_con);
+
+        private BasketLogic _basketLogic;
+
+        public BasketLogic BasketService => _basketLogic ?? new BasketLogic(_con);
         //----------------------------------------------------------------------------------------
         public void Dispose()
         {
             GC.SuppressFinalize(this);
         }
+
+     
     }
 
 }

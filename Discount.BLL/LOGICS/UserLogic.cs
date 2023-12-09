@@ -26,7 +26,9 @@ namespace Discount.BLL.LOGICS
                 User user = new User()
                 {
                     Name = usr.Name,
-                    Surname = usr.Surname
+                    Surname = usr.Surname,
+                    ID = usr.ID 
+
                 };
                 UserDTO value = new UserDTO()
                 {

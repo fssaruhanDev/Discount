@@ -38,9 +38,12 @@ namespace Discount.Controllers
 
                 if (user.Code == "200")
                 {
+                    var _basket = await servicesProvider.BasketService.GetBasket(user.User.ID);
                     Token token = TokenHandler.CreateToken(_configuration);
                     token.Name = userName;
                     token.Role = "User";
+                    token.ID = user.User.ID;
+                    token.Basket = _basket;
                     return Ok(token);
                 }
                 else

@@ -4,10 +4,15 @@ namespace Discount.Data.ORM.Entities
 {
 	public class T210_Basket : BaseEntity
 	{
-        public T211_BasketProduct BasketProduct { get; set; }
+     
 
         public double Amount { get; set; }
-        public double Discount { get; set; }
+        public bool Discount { get; set; }
+
+        public int UserID { get; set; }
+        public T100_User User { get; set; }
+
+        public List<T211_BasketProduct>? BasketProduct { get; set; }
 
     }
 }

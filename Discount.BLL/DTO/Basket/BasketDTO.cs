@@ -1,14 +1,11 @@
 ﻿using System;
 namespace Discount.BLL.DTO.Basket
 {
-	public class BasketDTO
+	public class BasketDTO<T>
     {
-		public BasketDTO()
-		{
-		}
 
-		public Basket User { get; set; }
-		public string Status { get; set; }
+        public T Basket { get; set; }
+        public string Status { get; set; }
 		public string Code { get; set; }
     }
 }
