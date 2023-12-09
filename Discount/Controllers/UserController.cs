@@ -25,7 +25,6 @@ namespace Discount.Controllers
             servicesProvider = new ServicesProvider(_db);
         }
 
-        
 
         // GET: api/values
         [HttpGet]
@@ -35,11 +34,13 @@ namespace Discount.Controllers
             try
             {
                 UserDTO user = await servicesProvider.UserServices.Login(userName, password);
-                   
 
-                if (user != null)
+
+                if (user.Code == "200")
                 {
                     Token token = TokenHandler.CreateToken(_configuration);
+                    token.Name = userName;
+                    token.Role = "User";
                     return Ok(token);
                 }
                 else
@@ -49,38 +50,14 @@ namespace Discount.Controllers
             }
             catch (Exception ex)
             {
-                return Ok( ex.ToString());
+                return Ok(ex.ToString());
             }
 
 
         }
 
-        // GET api/values/5
-        [HttpGet("{id}",Name = "GetUserWithID")]
 
-        public int Get(int id)
-        {
-            
-            return id;
-        }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
 

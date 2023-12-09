@@ -20,6 +20,10 @@ namespace Discount.BLL.BASE
         private UserLogic _userLogic;
 
         public UserLogic UserServices => _userLogic ?? new UserLogic(con);
+
+        private ProductLogic _ProductLogic;
+
+        public ProductLogic ProductService => _ProductLogic ?? new ProductLogic(con);
         //----------------------------------------------------------------------------------------
         public void Dispose()
         {

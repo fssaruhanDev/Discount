@@ -10,6 +10,6 @@ namespace Discount.BLL.DTO.User
 		public User User { get; set; }
 		public string Status { get; set; }
 		public string Code { get; set; }
-	}
+    }
 }
 

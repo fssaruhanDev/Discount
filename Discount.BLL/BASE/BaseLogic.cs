@@ -57,6 +57,8 @@ namespace Discount.BLL.BASE
             return _context.FirstOrDefault(x => x.IsActive == true && x.IsDeleted == false && x.ID == id);
         }
 
+        
+
         public bool Update(T entity)
         {
             var _entity = _context.Find(entity.ID);

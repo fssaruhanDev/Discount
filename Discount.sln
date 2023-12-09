@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 25.0.1706.5
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount", "Discount\Discount.csproj", "{4813F34F-64A7-476F-924C-B4968772E5C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount", "Discount\Discount.csproj", "{4813F34F-64A7-476F-924C-B4968772E5C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.Data", "Discount.Data\Discount.Data.csproj", "{62F9499F-B5EB-47C9-92D7-89C22B2CDCE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.Data", "Discount.Data\Discount.Data.csproj", "{62F9499F-B5EB-47C9-92D7-89C22B2CDCE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.BLL", "Discount.BLL\Discount.BLL.csproj", "{BCAF352D-9FA2-4556-B955-A2763EEB28AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.BLL", "Discount.BLL\Discount.BLL.csproj", "{BCAF352D-9FA2-4556-B955-A2763EEB28AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,7 +15,7 @@ namespace Discount.Data.ORM.Context
 
 
         public DbSet<T100_User> T100_Users { get; set; }
-        //public DbSet<T200_Product> T200_Products { get; set; }
+        public DbSet<T200_Product> T200_Products {  get; set; } 
         //public DbSet<T201_Basket> T201_Baskets { get; set; }
 
 

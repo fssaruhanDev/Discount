@@ -11,31 +11,34 @@ namespace Discount.Security
 
 		public static Token  CreateToken(IConfiguration configuration)
 		{
-			Token token = new Token();
-			SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
-			SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-			token.Expiration = DateTime.Now.AddMinutes(Convert.ToInt32(configuration["Token:Exparition"]));
+            Token token = new Token();
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
 
-			JwtSecurityToken jwtSecurityToken = new(
-				issuer: configuration["Token: Issuer"],
-				audience: configuration["Token: Audience"],
-				expires: token.Expiration,
-				notBefore: DateTime.Now,
-				signingCredentials: credentials
-				);
+            SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-			JwtSecurityTokenHandler tokenHandler = new();
-			token.AccessToken = tokenHandler.WriteToken(jwtSecurityToken);
+            token.Expiration = DateTime.Now.AddMinutes(Convert.ToInt32(configuration["Token:Exparition"]));
 
+            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+                issuer: configuration["Token:Issuer"],
+                audience: configuration["Token:Audience"],
+                expires: token.Expiration,
+                notBefore: DateTime.Now,
+                signingCredentials: credentials
+            );
 
-			byte[] number = new byte[32];
-			RandomNumberGenerator rnd = RandomNumberGenerator.Create();
-			rnd.GetBytes(number);
-			token.RefreshToken = Convert.ToBase64String(number);
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            token.AccessToken = tokenHandler.WriteToken(jwtSecurityToken);
 
+            Random random = new Random();
+            byte[] number = new byte[32];
+            random.NextBytes(number);
+            token.RefreshToken = Convert.ToBase64String(number);
 
-			return token;
+            return token;
+            
 		}
+
+
 	}
 }
 

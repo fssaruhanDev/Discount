@@ -16,10 +16,6 @@ namespace Discount.BLL.LOGICS
             _context = db.Set<T100_User>();
         }
 
-        public List<UserDTO> get()
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<UserDTO> Login(string username, string password)
         {
@@ -45,7 +41,7 @@ namespace Discount.BLL.LOGICS
                 UserDTO value = new UserDTO()
                 {
                     Status = "Reject",
-                    Code = "200"
+                    Code = "300"
                 };
                 return value;
             }

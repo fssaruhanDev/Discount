@@ -14,10 +14,7 @@
     <None Remove="DTO\Product\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DTO\" />
-    <Folder Include="LOGICS\" />
     <Folder Include="DTO\User\" />
-    <Folder Include="DTO\Product\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
