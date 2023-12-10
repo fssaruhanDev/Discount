@@ -1,4 +1,5 @@
-﻿using Discount.BLL.DTO.Basket;
+﻿using Discount.BLL.DTO;
+using Discount.BLL.DTO.Basket;
 using System;
 namespace Discount.Security
 {
@@ -16,7 +17,7 @@ namespace Discount.Security
 
         public int ID { get; set; }
 
-        public BasketDTO<Basket> Basket{ get; set; }
+        public BaseDTO<Basket> Basket{ get; set; }
 
 
     }

@@ -1,4 +1,5 @@
 ﻿using Discount.BLL.BASE;
+using Discount.BLL.DTO;
 using Discount.BLL.DTO.Basket;
 using Discount.BLL.DTO.Product;
 using Discount.Data.ORM.Context;
@@ -6,6 +7,7 @@ using Discount.Data.ORM.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,16 +24,16 @@ namespace Discount.BLL.LOGICS
         }
 
 
-        public async Task<BasketDTO<Basket>> GetBasket(int id)
+        public async Task<BaseDTO<Basket>> GetBasket(int id)
         {
+
             try
             {
-                BasketDTO<Basket> basketDTO = new();
                 var basket = await _context.FirstOrDefaultAsync(x => x.UserID == id && x.IsDeleted == false && x.IsActive == true);
 
                 if (basket == null)
                 {
-                    T210_Basket _Basket = new T210_Basket()
+                    T210_Basket newBasket = new T210_Basket()
                     {
                         UserID = id,
                         IsDeleted = false,
@@ -40,56 +42,188 @@ namespace Discount.BLL.LOGICS
                         Discount = false,
                         CreateDate = DateTime.Now
                     };
-                    db.Add(_Basket);
+                    db.Add(newBasket);
                     db.SaveChanges();
-                    Basket getBasket = new Basket();
-                    getBasket.ID = _Basket.ID;
 
-                    basketDTO.Basket = getBasket;
-                    basketDTO.Status = "CreatedBasket";
-                    basketDTO.Code = "200";
-
+                    BaseDTO<Basket> baseDTO = new BaseDTO<Basket>("200", "Success");
+                    return baseDTO;
                 }
                 else
                 {
-                    double productPrice = (double)(basket.BasketProduct?.FirstOrDefault(x => x.BasketID == basket.ID) == null ? 0 : basket.BasketProduct?.FirstOrDefault(x => x.BasketID == basket.ID).ProductPrice);
-                    var productQuantity = basket.BasketProduct?.FirstOrDefault(x => x.BasketID == basket.ID) == null ? 0 : basket.BasketProduct.FirstOrDefault(x => x.BasketID == basket.ID).ProductQuantity;
-                    Basket getBasket = new Basket
-                    {
-                        ID = basket.ID,
-                        Amount = basket.Amount,
-                        Discount = basket.Amount >= 1000 ? true : false,
-                        Quantity = productQuantity,
-                        Price = productPrice,
-                        Product = basket.BasketProduct?.Where(x => x.BasketID == basket.ID)
-                        .Select(bsk => new Product()
-                        {
-                            ID = bsk.Product.ID,
-                            Description = bsk.Product.ProductDescription,
-                            Name = bsk.Product.ProductName,
-                            Price = bsk.Product.ProductPrice,
-                            Stock = bsk.Product.ProductStock
-
-                        }).ToList()
-                    };
-
-                    basketDTO.Status = "Success";
-                    basketDTO.Code = "200";
-                    basketDTO.Basket = getBasket;
-
-
+                    var basketProduct = basket.BasketProduct?.FirstOrDefault(x => x.BasketID == basket.ID);
+                    return GetBasketItem(basketProduct, basket);
                 }
-
-
-                return basketDTO;
 
             }
             catch (Exception ex)
             {
-                
+
+                throw;
+            }
+
+        }
+
+        public async Task<BaseDTO<Basket>> AddBasketProduct(BasketProduct _basketProduct)
+        {
+            try
+            {
+                BaseDTO<Basket> basketDTO = new BaseDTO<Basket>();
+                var basket = await _context.FirstOrDefaultAsync(x => x.UserID == _basketProduct.UserID && !x.IsDeleted && x.IsActive);
+                var product = db.T200_Products.FirstOrDefault(x => x.ID == _basketProduct.ProductID && x.IsActive == true && x.IsDeleted == false);
+
+                if (product == null)
+                {
+                    basketDTO.Status = "Ürün bulunamadı";
+                    basketDTO.Code = "1000";
+                    return basketDTO;
+                }
+
+
+                if (basket == null)
+                {
+                    T210_Basket newBasket = new T210_Basket()
+                    {
+                        UserID = _basketProduct.UserID,
+                        IsDeleted = false,
+                        IsActive = true,
+                        Amount = 0,
+                        Discount = false,
+                        CreateDate = DateTime.Now
+                    };
+                    db.Add(newBasket);
+                    db.SaveChanges();
+
+                    T211_BasketProduct BasketProduct = new T211_BasketProduct()
+                    {
+                        BasketID = newBasket.ID,
+                        ProductID = _basketProduct.ProductID,
+                        ProductPrice = product.ProductPrice * _basketProduct.ProductQuantity,
+                    };
+                    if (StockCheck(product,_basketProduct.ProductQuantity))
+                    {
+                        BasketProduct.ProductQuantity = _basketProduct.ProductQuantity;
+                    }
+                    else
+                    {
+                        basketDTO.Status = "Stoktan Fazla Ürün";
+                        basketDTO.Code = "1100";
+                        return basketDTO;
+                    }
+                    db.Add(BasketProduct);
+                    db.SaveChanges();
+
+                    basketDTO.Status = "Success";
+                    basketDTO.Code = "200";
+                    return basketDTO;
+
+
+                }
+                else
+                {
+
+                    var _basketItemCheck = db.T211_BasketProducts.FirstOrDefault(x => x.ProductID == _basketProduct.ProductID && x.BasketID == basket.ID);
+
+                    if (_basketItemCheck != null)
+                    {
+                        if (StockCheck(product, _basketProduct.ProductQuantity))
+                        {
+                            _basketItemCheck.ProductQuantity += _basketItemCheck.ProductQuantity;
+                            db.SaveChanges();
+                            basketDTO.Status = "Success";
+                            basketDTO.Code = "200";
+                            return basketDTO;
+                        }
+                        else
+                        {
+                            basketDTO.Status = "Stoktan Fazla Ürün";
+                            basketDTO.Code = "1100";
+                            return basketDTO;
+                        }
+
+
+                    }
+                    else
+                    {
+
+                        T211_BasketProduct BasketProduct = new T211_BasketProduct()
+                        {
+                            BasketID = basket.ID,
+                            ProductID = _basketProduct.ProductID,
+                            ProductPrice = product.ProductPrice * _basketProduct.ProductQuantity,
+                        };
+
+                        if (StockCheck(product, _basketProduct.ProductQuantity))
+                        {
+                            BasketProduct.ProductQuantity = _basketProduct.ProductQuantity;
+                        }
+                        else
+                        {
+                            basketDTO.Status = "Stoktan Fazla Ürün";
+                            basketDTO.Code = "1000";
+                            return basketDTO;
+                        }
+                        db.Add(BasketProduct);
+                        db.SaveChanges();
+                        basketDTO.Status = "Success";
+                        basketDTO.Code = "200";
+                        return basketDTO;
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
                 throw ex;
             }
 
+        }
+
+
+
+        static bool StockCheck(T200_Product _Product, int ProductQuantity)
+        {
+            var ProductQuantityCheck = ProductQuantity > _Product.ProductStock;
+            if (!ProductQuantityCheck)
+            {
+                return true;
+            }
+            else { return false; }
+        }
+
+
+        static BaseDTO<Basket> GetBasketItem(T211_BasketProduct basketProduct, T210_Basket basket)
+        {
+            
+            double productPrice = basketProduct?.ProductPrice ?? 0;
+            var productQuantity = basketProduct?.ProductQuantity ?? 0;
+
+            Basket getBasket = new Basket
+            {
+                ID = basket.ID,
+                Amount = basket.Amount,
+                Discount = basket.Amount >= 1000,
+                Quantity = productQuantity
+            };
+
+            var Product = basket.BasketProduct
+                ?.Where(x => x.BasketID == basket.ID)
+                .Select(bsk => new Product
+                {
+                    ID = bsk.Product.ID,
+                    Description = bsk.Product.ProductDescription,
+                    Name = bsk.Product.ProductName,
+                    Price = bsk.Product.ProductPrice,
+                    Stock = bsk.Product.ProductStock
+                })
+                .ToList();
+
+            getBasket.Price = getBasket.Discount ? getBasket.Price * 0.90 : getBasket.Price;
+
+            BaseDTO<Basket> baseDTO = new BaseDTO<Basket>("200","Success",getBasket);
+
+            return baseDTO;
         }
     }
 }
