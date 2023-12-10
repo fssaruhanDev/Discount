@@ -9,7 +9,6 @@ namespace Discount.BLL.DTO.Basket
         public double Amount { get; set; }
         public bool Discount { get; set; }
         public double Price { get; set; }
-        public int Quantity { get; set; }
         public List<Product.Product> Product { get; set; }
     }
 }

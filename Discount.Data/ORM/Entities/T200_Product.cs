@@ -11,6 +11,10 @@ namespace Discount.Data.ORM.Entities
         public int ProductStock { get; set; }
         public double ProductPrice { get; set; }
 
+
+        public int CompanyID { get; set; }
+        public T201_Category Category { get; set; }
+
         List<T211_BasketProduct>? BasketProducts { get; set; }
     }
 }

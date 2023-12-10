@@ -12,7 +12,7 @@ namespace Discount.Data.ORM.Entities
         public int UserID { get; set; }
         public T100_User User { get; set; }
 
-        public List<T211_BasketProduct>? BasketProduct { get; set; }
+        public List<T211_BasketProduct> BasketProduct { get; set; }
 
     }
 }

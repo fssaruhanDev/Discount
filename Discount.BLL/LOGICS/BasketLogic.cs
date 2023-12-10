@@ -50,8 +50,17 @@ namespace Discount.BLL.LOGICS
                 }
                 else
                 {
-                    var basketProduct = basket.BasketProduct?.FirstOrDefault(x => x.BasketID == basket.ID);
-                    return GetBasketItem(basketProduct, basket);
+                    var basketProduct = db.T211_BasketProducts.FirstOrDefault(x => x.BasketID == basket.ID);
+                    if (basketProduct == null)
+                    {
+                        BaseDTO<Basket> baseDTO = new BaseDTO<Basket>("201", "Ürün Bulunamadı");
+                        return baseDTO;
+                    }
+                    else
+                    {
+                        return GetBasketItem(basketProduct, basket, db);
+                    }
+               
                 }
 
             }
@@ -193,7 +202,7 @@ namespace Discount.BLL.LOGICS
         }
 
 
-        static BaseDTO<Basket> GetBasketItem(T211_BasketProduct basketProduct, T210_Basket basket)
+        static BaseDTO<Basket> GetBasketItem(T211_BasketProduct basketProduct, T210_Basket basket, EntityConnection db)
         {
             
             double productPrice = basketProduct?.ProductPrice ?? 0;
@@ -204,22 +213,32 @@ namespace Discount.BLL.LOGICS
                 ID = basket.ID,
                 Amount = basket.Amount,
                 Discount = basket.Amount >= 1000,
-                Quantity = productQuantity
+                
             };
-
+            var _product = db.T200_Products.FirstOrDefault(x => x.ID == basketProduct.ProductID);
             var Product = basket.BasketProduct
                 ?.Where(x => x.BasketID == basket.ID)
                 .Select(bsk => new Product
                 {
-                    ID = bsk.Product.ID,
+                    ID = _product.ID,
                     Description = bsk.Product.ProductDescription,
-                    Name = bsk.Product.ProductName,
-                    Price = bsk.Product.ProductPrice,
-                    Stock = bsk.Product.ProductStock
+                    Name = _product.ProductName,
+                    Price = basketProduct.ProductPrice,
+                    Company = _product.ProductCompany,
+                    Size = _product.ProductSize,
+                    Stock = _product.ProductStock,
+                    Quantity = productQuantity
                 })
                 .ToList();
+            double _amount = 0;
 
+            foreach (var item in Product)
+            {
+                _amount += item.Price;
+            }
+            getBasket.Amount = _amount;
             getBasket.Price = getBasket.Discount ? getBasket.Price * 0.90 : getBasket.Price;
+            getBasket.Product = Product;
 
             BaseDTO<Basket> baseDTO = new BaseDTO<Basket>("200","Success",getBasket);
 
